@@ -1,0 +1,16 @@
+{
+  "name": "gdr-landing-page",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Landing page da GDR com editor visual GrapesJS",
+  "scripts": {
+    "start": "http-server . -p 8080 -c-1",
+    "editor": "http-server . -p 8080 -c-1 -o /editor.html"
+  },
+  "dependencies": {
+    "grapesjs": "0.23.6"
+  },
+  "devDependencies": {
+    "http-server": "14.1.1"
+  }
+}

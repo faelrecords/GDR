@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Editor visual | GDR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="node_modules/grapesjs/dist/css/grapes.min.css">
+  <link rel="stylesheet" href="editor.css">
+  <script src="node_modules/grapesjs/dist/grapes.min.js"></script>
+  <script src="editor.js" defer></script>
+</head>
+<body>
+  <header class="editor-bar">
+    <a class="editor-brand" href="index.html" target="_blank" rel="noopener" title="Abrir o site em outra aba">
+      <img src="assets/gdr-logo.png" alt="GDR">
+      <span>Editor visual</span>
+    </a>
+
+    <div class="editor-tools" aria-label="Ferramentas do editor">
+      <button type="button" data-action="blocks">Blocos</button>
+      <button type="button" data-action="styles">Estilos</button>
+      <span class="tool-divider" aria-hidden="true"></span>
+      <button type="button" data-device="Desktop">Desktop</button>
+      <button type="button" data-device="Tablet">Tablet</button>
+      <button type="button" data-device="Mobile portrait">Mobile</button>
+      <span class="tool-divider" aria-hidden="true"></span>
+      <button type="button" data-action="undo" title="Desfazer">Desfazer</button>
+      <button type="button" data-action="redo" title="Refazer">Refazer</button>
+      <button type="button" data-action="preview">Prévia</button>
+    </div>
+
+    <div class="editor-actions">
+      <span id="editor-status" role="status" aria-live="polite">Carregando…</span>
+      <button class="button-secondary" type="button" data-action="download">Baixar cópia</button>
+      <button class="button-primary" type="button" data-action="save-files">Salvar arquivos</button>
+    </div>
+  </header>
+
+  <div class="editor-warning" id="editor-warning" hidden></div>
+  <main id="gjs" aria-label="Editor da landing page GDR"></main>
+</body>
+</html>

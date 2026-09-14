@@ -1,0 +1,13 @@
+node_modules/
+
+# Referências e skills locais usadas durante o desenvolvimento
+MID falconi/
+revenue-centric-design-main/
+Bootstrap-Site-Architect-Skill-main/
+
+# Arquivos do sistema e editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
