@@ -5533,3 +5533,22 @@ body.video-modal-open { overflow: hidden; }
   #resultados .testimonial-heading-row { margin-bottom: 36px; }
   #resultados .testimonial-cta { margin-top: 32px; padding-top: 28px; }
 }
+
+/* Ajuste final do conteúdo do hero. */
+.hero-shell .hero-copy h1 {
+  max-width: none;
+  font-size: clamp(34px, 3vw, 38px);
+  line-height: 1.12;
+  letter-spacing: -.052em;
+  white-space: nowrap;
+}
+.hero-shell .hero-lead,
+.hero-shell .hero-brand-mark {
+  font-weight: 400;
+}
+
+@media (max-width: 760px) {
+  .hero-shell .hero-copy h1 {
+    font-size: clamp(20px, 6.4vw, 25px);
+  }
+}
