@@ -5542,10 +5542,10 @@ body.video-modal-open { overflow: hidden; }
   letter-spacing: -.052em;
   white-space: nowrap;
 }
-.hero-shell .hero-lead,
-.hero-shell .hero-brand-mark {
+.hero-shell .hero-lead {
   font-weight: 400;
 }
+.hero-shell .hero-lead strong { font-weight: 700; }
 
 @media (max-width: 760px) {
   .hero-shell .hero-copy h1 {
