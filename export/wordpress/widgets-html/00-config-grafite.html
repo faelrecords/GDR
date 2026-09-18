@@ -5634,13 +5634,13 @@ body.elementor-page {
 .gdr-native-cta-section { width: 100%; }
 .gdr-native-cta-section > .e-con-inner,
 .gdr-native-cta-grid { width: min(calc(100% - 48px), var(--container)); max-width: var(--container); margin-inline: auto; }
-.gdr-native-cta-grid { position: relative; z-index: 2; display: grid; grid-template-columns: 1.08fr .92fr; grid-template-areas: "form copy"; align-items: center; gap: 72px; }
-.gdr-native-cta-copy-widget { grid-area: copy; width: 100%; }
+.gdr-native-cta-grid { position: relative; z-index: 2; display: flex !important; flex-direction: row !important; align-items: center; flex-wrap: nowrap; gap: 72px; }
+.gdr-native-cta-copy-widget { order: 2; flex: .92 1 0; width: auto; min-width: 0; }
 .gdr-native-cta-copy { grid-area: copy; }
 .gdr-native-cta-copy h2 { color: #fff !important; }
 .gdr-native-cta-copy > p { color: #a8a8ae !important; }
 .gdr-native-cta-copy .cta-detail { color: #a8a8ae !important; border-color: rgba(255,255,255,.16) !important; }
-.gdr-native-lead-form { grid-area: form; width: 100%; }
+.gdr-native-lead-form { order: 1; flex: 1.08 1 0; width: auto; min-width: 0; }
 .gdr-native-lead-form .elementor-widget-container { width: 100%; }
 .gdr-native-lead-form .elementor-form { width: 100%; }
 .gdr-native-lead-form .elementor-form-fields-wrapper { margin: 0 -7px; }
@@ -5674,7 +5674,9 @@ body.elementor-page {
   .method-unified { background: linear-gradient(180deg, var(--gdr-graphite) 0, #f7f6f3 28px, #f7f6f3 100%); }
   .deliverables-section { background: linear-gradient(180deg, #f3f3f1 0%, #f3f3f1 calc(100% - 28px), var(--gdr-graphite) 100%); }
   .faq-section { background: linear-gradient(180deg, var(--gdr-graphite) 0, #f5f3ef 28px, #f5f3ef calc(100% - 28px), var(--gdr-graphite) 100%); }
-  .gdr-native-cta-grid { width: min(calc(100% - 30px), var(--container)); display: flex; flex-direction: column; gap: 36px; }
+  .gdr-native-cta-grid { width: min(calc(100% - 30px), var(--container)); flex-direction: column !important; align-items: stretch; gap: 36px; }
+  .gdr-native-cta-copy-widget,
+  .gdr-native-lead-form { flex: 0 0 auto; width: 100%; }
   .gdr-native-lead-form, .gdr-native-cta-copy { width: 100%; }
   .gdr-native-lead-form .elementor-field-group { width: 100% !important; }
 }

@@ -499,13 +499,13 @@ body.elementor-page {
 .gdr-native-cta-section { width: 100%; }
 .gdr-native-cta-section > .e-con-inner,
 .gdr-native-cta-grid { width: min(calc(100% - 48px), var(--container)); max-width: var(--container); margin-inline: auto; }
-.gdr-native-cta-grid { position: relative; z-index: 2; display: grid; grid-template-columns: 1.08fr .92fr; grid-template-areas: "form copy"; align-items: center; gap: 72px; }
-.gdr-native-cta-copy-widget { grid-area: copy; width: 100%; }
+.gdr-native-cta-grid { position: relative; z-index: 2; display: flex !important; flex-direction: row !important; align-items: center; flex-wrap: nowrap; gap: 72px; }
+.gdr-native-cta-copy-widget { order: 2; flex: .92 1 0; width: auto; min-width: 0; }
 .gdr-native-cta-copy { grid-area: copy; }
 .gdr-native-cta-copy h2 { color: #fff !important; }
 .gdr-native-cta-copy > p { color: #a8a8ae !important; }
 .gdr-native-cta-copy .cta-detail { color: #a8a8ae !important; border-color: rgba(255,255,255,.16) !important; }
-.gdr-native-lead-form { grid-area: form; width: 100%; }
+.gdr-native-lead-form { order: 1; flex: 1.08 1 0; width: auto; min-width: 0; }
 .gdr-native-lead-form .elementor-widget-container { width: 100%; }
 .gdr-native-lead-form .elementor-form { width: 100%; }
 .gdr-native-lead-form .elementor-form-fields-wrapper { margin: 0 -7px; }
@@ -539,7 +539,9 @@ body.elementor-page {
   .method-unified { background: linear-gradient(180deg, var(--gdr-graphite) 0, #f7f6f3 28px, #f7f6f3 100%); }
   .deliverables-section { background: linear-gradient(180deg, #f3f3f1 0%, #f3f3f1 calc(100% - 28px), var(--gdr-graphite) 100%); }
   .faq-section { background: linear-gradient(180deg, var(--gdr-graphite) 0, #f5f3ef 28px, #f5f3ef calc(100% - 28px), var(--gdr-graphite) 100%); }
-  .gdr-native-cta-grid { width: min(calc(100% - 30px), var(--container)); display: flex; flex-direction: column; gap: 36px; }
+  .gdr-native-cta-grid { width: min(calc(100% - 30px), var(--container)); flex-direction: column !important; align-items: stretch; gap: 36px; }
+  .gdr-native-cta-copy-widget,
+  .gdr-native-lead-form { flex: 0 0 auto; width: 100%; }
   .gdr-native-lead-form, .gdr-native-cta-copy { width: 100%; }
   .gdr-native-lead-form .elementor-field-group { width: 100% !important; }
 }
@@ -579,9 +581,9 @@ const graphiteNativeFormWidget = {
       nativeField("email", { field_type: "email", field_label: "E-mail", placeholder: "voce@empresa.com.br", required: "true", width: "50" }),
       nativeField("cidade", { field_type: "text", field_label: "Cidade", placeholder: "Sua cidade", required: "true", width: "50" }),
       nativeField("colaboradores", {
-        field_type: "select",
+        field_type: "number",
         field_label: "Quantidade de colaboradores",
-        field_options: "Selecione|\nAté 5|ate_5\n6 a 15|6_15\n16 a 30|16_30\n31 a 60|31_60\nMais de 60|mais_60",
+        placeholder: "Ex.: 12",
         required: "true",
         width: "50",
       }),
@@ -633,6 +635,12 @@ const graphiteCtaGrid = {
   isInner: true,
   settings: {
     content_width: "full",
+    flex_direction: "row",
+    flex_direction_tablet: "row",
+    flex_direction_mobile: "column",
+    flex_wrap: "nowrap",
+    align_items: "center",
+    align_items_mobile: "stretch",
     _css_classes: "container cta-grid gdr-native-cta-grid",
     _element_id: "gdr-grade-formulario",
     html_tag: "div",
