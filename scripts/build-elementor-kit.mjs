@@ -8,6 +8,7 @@ const projectDirectory = path.resolve(scriptDirectory, "..");
 const wordpressDirectory = path.join(projectDirectory, "export", "wordpress");
 const kitDirectory = path.join(wordpressDirectory, "elementor-kit");
 const sourceDirectory = path.join(kitDirectory, "fontes-editaveis");
+const widgetDirectory = path.join(wordpressDirectory, "widgets-html");
 const assetDirectory = path.join(kitDirectory, "assets");
 
 const PUBLIC_ASSET_URL = "https://gdr.vibecodex.pro/assets/";
@@ -239,7 +240,49 @@ const markupByKey = {
   scripts: interactions,
 };
 
-const htmlFor = (definition) => `${commentBlock(definition)}\n${rewriteForWordPress(markupByKey[definition.key])}`;
+const localFixFor = (key) => {
+  if (key === "header") return `<style>
+/* Correção local: menu em largura total no Elementor. */
+.gdr-kit-row-header {
+  position: relative;
+  left: 50%;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  margin-right: -50vw !important;
+  margin-left: -50vw !important;
+}
+.gdr-kit-header .site-header { width: 100%; max-width: none; }
+</style>`;
+
+  if (key === "footer") return `<style>
+/* Correção local: rodapé em largura total no Elementor. */
+.gdr-kit-row-footer {
+  position: relative;
+  left: 50%;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  margin-right: -50vw !important;
+  margin-left: -50vw !important;
+}
+.gdr-kit-footer .site-footer { width: 100%; max-width: none; }
+</style>`;
+
+  if (key === "diagnostico") return `<style>
+/* Impede o tema do WordPress de trocar a cor do botão do formulário. */
+.gdr-kit-diagnostico .lead-form .form-submit.button-red {
+  color: #fff !important;
+  background: #c80012 !important;
+}
+</style>`;
+
+  return "";
+};
+
+const htmlFor = (definition) => [
+  commentBlock(definition),
+  localFixFor(definition.key),
+  rewriteForWordPress(markupByKey[definition.key]),
+].filter(Boolean).join("\n");
 
 const createHtmlWidget = (definition) => ({
   id: idFor(`widget-${definition.key}`),
@@ -346,6 +389,8 @@ ${definitions.map((item) => `- ${item.name}`).join("\n")}
 
 Todos os widgets possuem comentários no início do HTML indicando os elementos seguros para edição.
 
+Para substituição manual no Elementor, use os arquivos da pasta vizinha \`widgets-html\`. Cada arquivo contém exatamente o código que deve ser colado no widget correspondente. Menu, formulário e rodapé já incluem suas correções locais.
+
 ## Imagens
 
 Para abrir com fidelidade imediata, o template usa temporariamente:
@@ -394,6 +439,7 @@ ${htmlFor(definition)}
 await Promise.all([
   mkdir(kitDirectory, { recursive: true }),
   mkdir(sourceDirectory, { recursive: true }),
+  mkdir(widgetDirectory, { recursive: true }),
   mkdir(assetDirectory, { recursive: true }),
 ]);
 
@@ -410,6 +456,12 @@ await Promise.all([
 
 await Promise.all(definitions.map((definition, index) => writeFile(
   path.join(sourceDirectory, `${String(index).padStart(2, "0")}-${definition.key}.html`),
+  `${htmlFor(definition)}\n`,
+  "utf8",
+)));
+
+await Promise.all(definitions.map((definition, index) => writeFile(
+  path.join(widgetDirectory, `${String(index).padStart(2, "0")}-${definition.key}.html`),
   `${htmlFor(definition)}\n`,
   "utf8",
 )));

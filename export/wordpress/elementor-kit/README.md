@@ -34,6 +34,8 @@ Cada seção está em um widget HTML independente, nesta ordem:
 
 Todos os widgets possuem comentários no início do HTML indicando os elementos seguros para edição.
 
+Para substituição manual no Elementor, use os arquivos da pasta vizinha `widgets-html`. Cada arquivo contém exatamente o código que deve ser colado no widget correspondente. Menu, formulário e rodapé já incluem suas correções locais.
+
 ## Imagens
 
 Para abrir com fidelidade imediata, o template usa temporariamente:
