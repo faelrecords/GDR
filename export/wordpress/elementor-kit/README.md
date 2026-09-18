@@ -46,10 +46,12 @@ Uma cópia de todas as imagens está na pasta `assets` deste pacote. Depois de e
 
 ## Formulário
 
-O formulário HTML mantém o visual original e envia atualmente para:
+No JSON original, o formulário HTML mantém o visual original e envia atualmente para:
 `https://gdrconsulting.com.br/obrigado/`
 
-Para usar o webhook do Integrately com os recursos do Elementor Pro, substitua somente o widget **09 — Formulário e CTA** por um widget Formulário nativo e aplique o CSS visual já fornecido.
+No arquivo **GDR-Landing-Page-Elementor-Grafite.json**, o formulário já foi substituído pelo widget nativo do Elementor/Pro Elements. Ele preserva nome e sobrenome separados, demais campos, consentimento e o redirecionamento para a página de obrigado.
+
+Para conectar o Integrately nessa versão, abra o formulário no Elementor, adicione **Webhook** em **Ações após o envio** e cole a URL fornecida pelo Integrately. O JSON não inclui uma URL fictícia para evitar perda de leads.
 
 ## Após importar
 

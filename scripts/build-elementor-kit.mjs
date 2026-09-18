@@ -437,38 +437,43 @@ body.elementor-page {
   background: linear-gradient(180deg, var(--gdr-graphite) 0%, #1d1e22 100%);
 }
 
-/* Grafite para claro: hero → problemas. */
+/*
+  Os degradês ficam sempre dentro das seções claras.
+  Assim, as áreas grafite permanecem sólidas e a transição não invade o conteúdo escuro.
+*/
 #problemas-cards {
-  background: linear-gradient(180deg, var(--gdr-graphite) 0%, #f5f3ef 105px, #f5f3ef 100%);
+  background: linear-gradient(180deg,
+    var(--gdr-graphite) 0,
+    #d8d7d5 52px,
+    #f5f3ef 156px,
+    #f5f3ef calc(100% - 156px),
+    #d8d7d5 calc(100% - 52px),
+    var(--gdr-graphite) 100%);
 }
 
 .consultants-showcase {
   background: var(--gdr-graphite);
 }
 
-/* Claro para imagem escura: problemas → apresentação da equipe. */
-#gdr.consultants-showcase::before {
-  content: "";
-  position: absolute;
-  z-index: 4;
-  inset: 0 0 auto;
-  height: 92px;
-  pointer-events: none;
-  background: linear-gradient(180deg, #f5f3ef 0%, rgba(245,243,239,.72) 28%, transparent 100%);
-}
-
 .consultants-shade {
   background: linear-gradient(90deg, rgba(26,27,30,.98) 0%, rgba(26,27,30,.86) 44%, rgba(26,27,30,.12) 76%);
 }
 
-/* Imagem escura para claro: apresentação → método. */
+/* A borda escura pertence à seção clara da metodologia. */
 .method-unified {
-  background: linear-gradient(180deg, var(--gdr-graphite) 0%, #f7f6f3 92px, #f7f6f3 100%);
+  background: linear-gradient(180deg, var(--gdr-graphite) 0, #d9d8d5 54px, #f7f6f3 158px, #f7f6f3 100%);
 }
 
-/* Claro para grafite: entregas → cases. */
+/* A seção de entregas continua clara e absorve a passagem para os cases. */
+.deliverables-section {
+  background:
+    radial-gradient(circle at 84% 18%, rgba(200,0,18,.055), transparent 31%),
+    linear-gradient(90deg, transparent 0 49.92%, rgba(25,25,29,.035) 49.92% 50%, transparent 50% 100%),
+    linear-gradient(180deg, #f3f3f1 0%, #f3f3f1 calc(100% - 158px), #d7d7d5 calc(100% - 54px), var(--gdr-graphite) 100%);
+}
+
 #resultados.results-video-showcase {
-  background: linear-gradient(180deg, #f3f3f1 0%, var(--gdr-graphite) 82px, var(--gdr-graphite) 100%);
+  background: var(--gdr-graphite);
 }
 
 .results-video-showcase .testimonial-carousel,
@@ -477,17 +482,51 @@ body.elementor-page {
   background-color: var(--gdr-graphite-soft);
 }
 
-/* Grafite para claro: cases → FAQ. */
+/* O FAQ é claro e recebe as duas transições, sem clarear as seções grafite. */
 .faq-section {
-  background: linear-gradient(180deg, var(--gdr-graphite) 0%, #f5f3ef 92px, #f5f3ef 100%);
+  background: linear-gradient(180deg,
+    var(--gdr-graphite) 0,
+    #d8d7d5 54px,
+    #f5f3ef 158px,
+    #f5f3ef calc(100% - 158px),
+    #d8d7d5 calc(100% - 54px),
+    var(--gdr-graphite) 100%);
 }
 
-/* Claro para grafite: FAQ → formulário. */
 .cta-section {
   background:
-    radial-gradient(circle at 12% 34%, rgba(200,0,18,.2), transparent 35%),
-    linear-gradient(180deg, #f5f3ef 0%, var(--gdr-graphite) 92px, var(--gdr-graphite-deep) 100%);
+    radial-gradient(circle at 12% 34%, rgba(200,0,18,.16), transparent 38%),
+    var(--gdr-graphite-deep);
 }
+
+/* Formulário nativo do Elementor — exclusivo desta versão. */
+.gdr-native-cta-section { width: 100%; }
+.gdr-native-cta-section > .e-con-inner,
+.gdr-native-cta-grid { width: min(calc(100% - 48px), var(--container)); max-width: var(--container); margin-inline: auto; }
+.gdr-native-cta-grid { position: relative; z-index: 2; display: grid; grid-template-columns: 1.08fr .92fr; grid-template-areas: "form copy"; align-items: center; gap: 72px; }
+.gdr-native-cta-copy-widget { grid-area: copy; width: 100%; }
+.gdr-native-cta-copy { grid-area: copy; }
+.gdr-native-lead-form { grid-area: form; width: 100%; }
+.gdr-native-lead-form .elementor-widget-container { width: 100%; }
+.gdr-native-lead-form .elementor-form { width: 100%; }
+.gdr-native-lead-form .elementor-form-fields-wrapper { margin: 0 -7px; }
+.gdr-native-lead-form .elementor-field-group { padding-inline: 7px; margin-bottom: 17px; }
+.gdr-native-lead-form .elementor-field-label { margin: 0 0 7px; color: #515156; font-family: "Montserrat", sans-serif; font-size: 10px; font-weight: 700; line-height: 1.35; }
+.gdr-native-lead-form .elementor-field,
+.gdr-native-lead-form .elementor-select-wrapper select { min-height: 49px; padding: 0 14px; border: 1px solid #dedee1; border-radius: 7px; color: #19191d; background: #fafafa; font-family: "Montserrat", sans-serif; font-size: 12px; box-shadow: none; }
+.gdr-native-lead-form .elementor-field:focus,
+.gdr-native-lead-form .elementor-select-wrapper select:focus { border-color: #c80012; outline: 3px solid rgba(200,0,18,.08); }
+.gdr-native-lead-form .elementor-field-type-html { width: 100%; padding-inline: 7px; }
+.gdr-native-lead-form .form-heading { margin-bottom: 13px; }
+.gdr-native-lead-form .elementor-field-type-checkbox { align-items: center; margin: 0 0 18px; }
+.gdr-native-lead-form .elementor-field-type-checkbox .elementor-field-subgroup { display: block; }
+.gdr-native-lead-form .elementor-field-option { display: flex; align-items: center; gap: 10px; }
+.gdr-native-lead-form .elementor-field-option input { flex: 0 0 16px; width: 16px; height: 16px; margin: 0; accent-color: #c80012; }
+.gdr-native-lead-form .elementor-field-option label { margin: 0; color: #7c7c82; font-size: 9px; line-height: 1.5; }
+.gdr-native-lead-form .elementor-field-type-submit { width: 100%; margin: 0; }
+.gdr-native-lead-form .elementor-button { width: 100%; min-height: 54px; border: 0; border-radius: 7px; color: #fff; background: #c80012; font-family: "Poppins", sans-serif; font-size: 12px; font-weight: 800; box-shadow: none; }
+.gdr-native-lead-form .elementor-button:hover { color: #fff; background: #a90010; transform: translateY(-1px); }
+.gdr-native-lead-form .elementor-form::after { content: "Seus dados serão usados apenas para este atendimento."; display: block; margin-top: 12px; color: #a1a1a6; font-size: 8px; text-align: center; }
 
 .site-footer {
   border-top: 1px solid rgba(255,255,255,.08);
@@ -495,12 +534,13 @@ body.elementor-page {
 }
 
 @media (max-width: 760px) {
-  #problemas-cards { background: linear-gradient(180deg, var(--gdr-graphite) 0%, #f5f3ef 68px, #f5f3ef 100%); }
-  #gdr.consultants-showcase::before { height: 62px; }
-  .method-unified { background: linear-gradient(180deg, var(--gdr-graphite) 0%, #f7f6f3 64px, #f7f6f3 100%); }
-  #resultados.results-video-showcase { background: linear-gradient(180deg, #f3f3f1 0%, var(--gdr-graphite) 58px, var(--gdr-graphite) 100%); }
-  .faq-section { background: linear-gradient(180deg, var(--gdr-graphite) 0%, #f5f3ef 62px, #f5f3ef 100%); }
-  .cta-section { background: linear-gradient(180deg, #f5f3ef 0%, var(--gdr-graphite) 64px, var(--gdr-graphite-deep) 100%); }
+  #problemas-cards { background: linear-gradient(180deg, var(--gdr-graphite) 0, #e1e0de 38px, #f5f3ef 104px, #f5f3ef calc(100% - 104px), #e1e0de calc(100% - 38px), var(--gdr-graphite) 100%); }
+  .method-unified { background: linear-gradient(180deg, var(--gdr-graphite) 0, #e1e0de 38px, #f7f6f3 104px, #f7f6f3 100%); }
+  .deliverables-section { background: linear-gradient(180deg, #f3f3f1 0%, #f3f3f1 calc(100% - 104px), #e1e0de calc(100% - 38px), var(--gdr-graphite) 100%); }
+  .faq-section { background: linear-gradient(180deg, var(--gdr-graphite) 0, #e1e0de 38px, #f5f3ef 104px, #f5f3ef calc(100% - 104px), #e1e0de calc(100% - 38px), var(--gdr-graphite) 100%); }
+  .gdr-native-cta-grid { width: min(calc(100% - 30px), var(--container)); display: flex; flex-direction: column; gap: 36px; }
+  .gdr-native-lead-form, .gdr-native-cta-copy { width: 100%; }
+  .gdr-native-lead-form .elementor-field-group { width: 100% !important; }
 }
 </style>`;
 
@@ -508,6 +548,124 @@ const graphiteTemplate = structuredClone(pageTemplate);
 graphiteTemplate.title = "GDR — Landing Page grafite com degradês";
 graphiteTemplate.page_settings.background_color = "#1A1B1E";
 graphiteTemplate.content[0].elements[0].settings.html += `\n${graphiteThemeCss}`;
+
+const nativeField = (key, settings) => ({
+  _id: idFor(`native-form-field-${key}`).slice(0, 7),
+  custom_id: key,
+  width: "100",
+  width_tablet: "100",
+  width_mobile: "100",
+  ...settings,
+});
+
+const graphiteNativeFormWidget = {
+  id: idFor("graphite-native-form-widget"),
+  elType: "widget",
+  widgetType: "form",
+  isInner: false,
+  settings: {
+    form_name: "Pré-diagnóstico GDR",
+    form_id: "gdr_pre_diagnostico",
+    form_fields: [
+      nativeField("cabecalho", {
+        field_type: "html",
+        field_html: '<div class="form-heading"><strong>Solicite seu pré-diagnóstico com a GDR.</strong><small>Leva cerca de 2 minutos.</small></div>',
+      }),
+      nativeField("nome", { field_type: "text", field_label: "Nome", placeholder: "Seu nome", required: "true", width: "25" }),
+      nativeField("sobrenome", { field_type: "text", field_label: "Sobrenome", placeholder: "Seu sobrenome", required: "true", width: "33" }),
+      nativeField("empresa", { field_type: "text", field_label: "Nome da sua empresa", placeholder: "Nome da empresa", required: "true", width: "42" }),
+      nativeField("telefone", { field_type: "tel", field_label: "Telefone", placeholder: "(00) 00000-0000", required: "true", width: "50" }),
+      nativeField("email", { field_type: "email", field_label: "E-mail", placeholder: "voce@empresa.com.br", required: "true", width: "50" }),
+      nativeField("cidade", { field_type: "text", field_label: "Cidade", placeholder: "Sua cidade", required: "true", width: "50" }),
+      nativeField("colaboradores", {
+        field_type: "select",
+        field_label: "Quantidade de colaboradores",
+        field_options: "Selecione|\nAté 5|ate_5\n6 a 15|6_15\n16 a 30|16_30\n31 a 60|31_60\nMais de 60|mais_60",
+        required: "true",
+        width: "50",
+      }),
+      nativeField("consentimento", {
+        field_type: "checkbox",
+        field_label: "",
+        field_options: "Concordo em receber o contato da equipe GDR sobre meu pré-diagnóstico.|sim",
+        required: "true",
+        css_classes: "gdr-native-consent",
+      }),
+    ],
+    show_labels: "yes",
+    input_size: "sm",
+    button_size: "sm",
+    button_text: "Quero meu pré-diagnóstico ↗",
+    button_width: "100",
+    submit_actions: ["redirect"],
+    redirect_to: `${WORDPRESS_SITE_URL}/obrigado/`,
+    success_message: "Dados enviados. Estamos direcionando você...",
+    error_message: "Não foi possível enviar. Confira os campos e tente novamente.",
+    required_message: "Este campo é obrigatório.",
+    invalid_message: "Preencha este campo corretamente.",
+    _css_classes: "lead-form gdr-native-lead-form",
+    _element_id: "gdr-formulario-nativo",
+  },
+  elements: [],
+};
+
+const graphiteCtaCopyWidget = {
+  id: idFor("graphite-native-cta-copy"),
+  elType: "widget",
+  widgetType: "html",
+  isInner: false,
+  settings: {
+    html: `<div class="cta-copy gdr-native-cta-copy">
+  <h2>Descubra o que está impedindo o lucro de aparecer.</h2>
+  <p>Conte um pouco sobre a sua empresa. A equipe GDR analisa o cenário antes da conversa para chegar ao ponto mais rápido.</p>
+  <p class="cta-detail">Em até 24 horas, entramos em contato para agendar o pré-diagnóstico. Sem compromisso e sem promessa fácil.</p>
+</div>`,
+    _css_classes: "gdr-native-cta-copy-widget",
+    _element_id: "gdr-texto-formulario",
+  },
+  elements: [],
+};
+
+const graphiteCtaGrid = {
+  id: idFor("graphite-native-cta-grid"),
+  elType: "container",
+  isInner: true,
+  settings: {
+    content_width: "full",
+    _css_classes: "container cta-grid gdr-native-cta-grid",
+    _element_id: "gdr-grade-formulario",
+    html_tag: "div",
+  },
+  elements: [graphiteCtaCopyWidget, graphiteNativeFormWidget],
+};
+
+const graphiteNativeCtaSection = {
+  id: idFor("graphite-native-cta-section"),
+  elType: "container",
+  isInner: true,
+  settings: {
+    content_width: "full",
+    flex_direction: "column",
+    _css_classes: "section cta-section gdr-native-cta-section",
+    _element_id: "diagnostico",
+    html_tag: "section",
+  },
+  elements: [
+    {
+      id: idFor("graphite-native-cta-glow"),
+      elType: "widget",
+      widgetType: "html",
+      isInner: false,
+      settings: { html: '<div class="cta-glow" aria-hidden="true"></div>' },
+      elements: [],
+    },
+    graphiteCtaGrid,
+  ],
+};
+
+const graphiteDiagnosticIndex = definitions.findIndex(({ key }) => key === "diagnostico");
+const graphitePreviewTemplate = structuredClone(graphiteTemplate);
+graphiteTemplate.content[graphiteDiagnosticIndex].elements = [graphiteNativeCtaSection];
 
 const thankYouBody = thankYouSource.match(/<body[^>]*>([\s\S]*?)<\/body>/i)?.[1]?.trim();
 if (!thankYouBody) throw new Error("Conteúdo da página de obrigado não encontrado.");
@@ -583,10 +741,12 @@ Uma cópia de todas as imagens está na pasta \`assets\` deste pacote. Depois de
 
 ## Formulário
 
-O formulário HTML mantém o visual original e envia atualmente para:
+No JSON original, o formulário HTML mantém o visual original e envia atualmente para:
 \`${WORDPRESS_SITE_URL}/obrigado/\`
 
-Para usar o webhook do Integrately com os recursos do Elementor Pro, substitua somente o widget **09 — Formulário e CTA** por um widget Formulário nativo e aplique o CSS visual já fornecido.
+No arquivo **GDR-Landing-Page-Elementor-Grafite.json**, o formulário já foi substituído pelo widget nativo do Elementor/Pro Elements. Ele preserva nome e sobrenome separados, demais campos, consentimento e o redirecionamento para a página de obrigado.
+
+Para conectar o Integrately nessa versão, abra o formulário no Elementor, adicione **Webhook** em **Ações após o envio** e cole a URL fornecida pelo Integrately. O JSON não inclui uma URL fictícia para evitar perda de leads.
 
 ## Após importar
 
@@ -627,7 +787,7 @@ const graphitePreviewHtml = `<!doctype html>
   <title>Prévia do Kit Elementor Grafite — GDR</title>
 </head>
 <body class="elementor-page">
-  ${graphiteTemplate.content.map((container) => `<div class="e-con ${container.settings._css_classes}">
+  ${graphitePreviewTemplate.content.map((container) => `<div class="e-con ${container.settings._css_classes}">
     <div class="elementor-widget-html ${container.elements[0].settings._css_classes}">
       <div class="elementor-widget-container">
 ${container.elements[0].settings.html}
