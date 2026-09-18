@@ -446,6 +446,8 @@ await Promise.all([
 await Promise.all([
   writeFile(path.join(kitDirectory, "GDR-Landing-Page-Elementor.json"), `${JSON.stringify(pageTemplate, null, 2)}\n`, "utf8"),
   writeFile(path.join(kitDirectory, "GDR-Obrigado-Elementor.json"), `${JSON.stringify(thankYouTemplate, null, 2)}\n`, "utf8"),
+  writeFile(path.join(wordpressDirectory, "GDR-Landing-Page-Elementor.json"), `${JSON.stringify(pageTemplate, null, 2)}\n`, "utf8"),
+  writeFile(path.join(wordpressDirectory, "GDR-Obrigado-Elementor.json"), `${JSON.stringify(thankYouTemplate, null, 2)}\n`, "utf8"),
   writeFile(path.join(kitDirectory, "README.md"), readme, "utf8"),
   writeFile(path.join(kitDirectory, "CORRECAO-MENU-RODAPE.css"), `${elementorCompatibilityCss}\n`, "utf8"),
   writeFile(path.join(kitDirectory, "preview.html"), previewHtml, "utf8"),
