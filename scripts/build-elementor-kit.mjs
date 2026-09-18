@@ -500,16 +500,19 @@ body.elementor-page {
 .gdr-native-cta-section > .e-con-inner,
 .gdr-native-cta-grid { width: min(calc(100% - 48px), var(--container)); max-width: var(--container); margin-inline: auto; }
 .gdr-native-cta-grid { position: relative; z-index: 2; display: flex !important; flex-direction: row !important; align-items: center; flex-wrap: nowrap; gap: 72px; }
-.gdr-native-cta-copy-widget { order: 2; flex: .92 1 0; width: auto; min-width: 0; }
+.gdr-native-cta-copy-widget { order: 2; flex: 0 1 52%; width: 52%; min-width: 0; }
 .gdr-native-cta-copy { grid-area: copy; }
 .gdr-native-cta-copy h2 { color: #fff !important; }
 .gdr-native-cta-copy > p { color: #a8a8ae !important; }
 .gdr-native-cta-copy .cta-detail { color: #a8a8ae !important; border-color: rgba(255,255,255,.16) !important; }
-.gdr-native-lead-form { order: 1; flex: 1.08 1 0; width: auto; min-width: 0; }
+.gdr-native-lead-form { order: 1; flex: 0 1 48%; width: 48%; min-width: 0; }
 .gdr-native-lead-form .elementor-widget-container { width: 100%; }
 .gdr-native-lead-form .elementor-form { width: 100%; }
 .gdr-native-lead-form .elementor-form-fields-wrapper { margin: 0 -7px; }
 .gdr-native-lead-form .elementor-field-group { padding-inline: 7px; margin-bottom: 17px; }
+.gdr-native-lead-form .elementor-field-group.elementor-col-33 { width: 33.333% !important; }
+.gdr-native-lead-form .elementor-field-group.elementor-col-50 { width: 50% !important; }
+.gdr-native-lead-form .elementor-field-group.elementor-col-100 { width: 100% !important; }
 .gdr-native-lead-form .elementor-field-label { margin: 0 0 7px; color: #515156; font-family: "Montserrat", sans-serif; font-size: 10px; font-weight: 700; line-height: 1.35; }
 .gdr-native-lead-form .elementor-field,
 .gdr-native-lead-form .elementor-select-wrapper select { min-height: 49px; padding: 0 14px; border: 1px solid #dedee1; border-radius: 7px; color: #19191d; background: #fafafa; font-family: "Montserrat", sans-serif; font-size: 12px; box-shadow: none; }
@@ -574,9 +577,9 @@ const graphiteNativeFormWidget = {
         field_type: "html",
         field_html: '<div class="form-heading"><strong>Solicite seu pré-diagnóstico com a GDR.</strong><small>Leva cerca de 2 minutos.</small></div>',
       }),
-      nativeField("nome", { field_type: "text", field_label: "Nome", placeholder: "Seu nome", required: "true", width: "25" }),
+      nativeField("nome", { field_type: "text", field_label: "Nome", placeholder: "Seu nome", required: "true", width: "33" }),
       nativeField("sobrenome", { field_type: "text", field_label: "Sobrenome", placeholder: "Seu sobrenome", required: "true", width: "33" }),
-      nativeField("empresa", { field_type: "text", field_label: "Nome da sua empresa", placeholder: "Nome da empresa", required: "true", width: "42" }),
+      nativeField("empresa", { field_type: "text", field_label: "Nome da sua empresa", placeholder: "Nome da empresa", required: "true", width: "33" }),
       nativeField("telefone", { field_type: "tel", field_label: "Telefone", placeholder: "(00) 00000-0000", required: "true", width: "50" }),
       nativeField("email", { field_type: "email", field_label: "E-mail", placeholder: "voce@empresa.com.br", required: "true", width: "50" }),
       nativeField("cidade", { field_type: "text", field_label: "Cidade", placeholder: "Sua cidade", required: "true", width: "50" }),
