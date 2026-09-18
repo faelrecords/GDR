@@ -1,0 +1,22 @@
+/* Correção de largura para menu e rodapé dentro do Elementor. */
+.gdr-kit-row-header,
+.gdr-kit-row-footer {
+  position: relative;
+  left: 50%;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  margin-right: -50vw !important;
+  margin-left: -50vw !important;
+}
+
+.gdr-kit-header .site-header,
+.gdr-kit-footer .site-footer {
+  width: 100%;
+  max-width: none;
+}
+
+/* Protege a cor do botão contra o estilo global do tema. */
+.gdr-kit-diagnostico .lead-form .form-submit.button-red {
+  color: #fff !important;
+  background: #c80012 !important;
+}

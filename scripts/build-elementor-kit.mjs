@@ -161,6 +161,29 @@ const resultsEnd = pageSource.indexOf("</section>", resultsStart) + "</section>"
 const faqStart = pageSource.indexOf('<section class="section faq-section', resultsEnd);
 const resultsModal = pageSource.slice(resultsEnd, faqStart).trim();
 
+const elementorCompatibilityCss = `/* Correção de largura para menu e rodapé dentro do Elementor. */
+.gdr-kit-row-header,
+.gdr-kit-row-footer {
+  position: relative;
+  left: 50%;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  margin-right: -50vw !important;
+  margin-left: -50vw !important;
+}
+
+.gdr-kit-header .site-header,
+.gdr-kit-footer .site-footer {
+  width: 100%;
+  max-width: none;
+}
+
+/* Protege a cor do botão contra o estilo global do tema. */
+.gdr-kit-diagnostico .lead-form .form-submit.button-red {
+  color: #fff !important;
+  background: #c80012 !important;
+}`;
+
 const globalCss = `
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -178,6 +201,8 @@ body.elementor-page { margin: 0; overflow-x: clip; }
   padding: 0 !important;
   gap: 0 !important;
 }
+
+${elementorCompatibilityCss}
 
 ${cssSource}
 </style>`;
@@ -341,6 +366,10 @@ Para usar o webhook do Integrately com os recursos do Elementor Pro, substitua s
 2. Limpe o cache do WP Rocket.
 3. Confira desktop, tablet e mobile.
 4. Não remova os widgets de configuração global e interações.
+
+## Se você importou uma versão anterior
+
+O arquivo \`CORRECAO-MENU-RODAPE.css\` contém a correção isolada para menu e rodapé ocuparem toda a largura. Cole seu conteúdo no final do widget **00 — Configuração visual global** e limpe o cache. No JSON atual essa correção já está incluída.
 `;
 
 const previewHtml = `<!doctype html>
@@ -372,6 +401,7 @@ await Promise.all([
   writeFile(path.join(kitDirectory, "GDR-Landing-Page-Elementor.json"), `${JSON.stringify(pageTemplate, null, 2)}\n`, "utf8"),
   writeFile(path.join(kitDirectory, "GDR-Obrigado-Elementor.json"), `${JSON.stringify(thankYouTemplate, null, 2)}\n`, "utf8"),
   writeFile(path.join(kitDirectory, "README.md"), readme, "utf8"),
+  writeFile(path.join(kitDirectory, "CORRECAO-MENU-RODAPE.css"), `${elementorCompatibilityCss}\n`, "utf8"),
   writeFile(path.join(kitDirectory, "preview.html"), previewHtml, "utf8"),
   writeFile(path.join(sourceDirectory, "gdr-global.css"), cssSource, "utf8"),
   writeFile(path.join(sourceDirectory, "gdr-interacoes.js"), jsSource, "utf8"),

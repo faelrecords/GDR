@@ -54,3 +54,7 @@ Para usar o webhook do Integrately com os recursos do Elementor Pro, substitua s
 2. Limpe o cache do WP Rocket.
 3. Confira desktop, tablet e mobile.
 4. Não remova os widgets de configuração global e interações.
+
+## Se você importou uma versão anterior
+
+O arquivo `CORRECAO-MENU-RODAPE.css` contém a correção isolada para menu e rodapé ocuparem toda a largura. Cole seu conteúdo no final do widget **00 — Configuração visual global** e limpe o cache. No JSON atual essa correção já está incluída.
