@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Seções exportadas | GDR Consulting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { color-scheme: dark; --red: #e00016; --surface: #151517; --line: #303034; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: #0b0b0d; color: #fff; font-family: Montserrat, sans-serif; }
+    main { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 72px 0 96px; }
+    h1 { max-width: 760px; margin: 0; font: 800 clamp(2rem, 5vw, 4.4rem)/.98 Poppins, sans-serif; letter-spacing: -.05em; }
+    .intro { max-width: 700px; margin: 20px 0 44px; color: #aaaab1; line-height: 1.7; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    a { display: flex; align-items: center; justify-content: space-between; min-height: 92px; padding: 24px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); color: #fff; text-decoration: none; transition: border-color .2s ease, transform .2s ease, background .2s ease; }
+    a:hover { border-color: var(--red); background: #1b1517; transform: translateY(-2px); }
+    strong { font: 700 1rem/1.3 Poppins, sans-serif; }
+    span { color: var(--red); font-size: 1.5rem; }
+    @media (max-width: 680px) { main { width: min(100% - 28px, 1120px); padding-top: 48px; } .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Seções exportadas da landing page GDR.</h1>
+    <p class="intro">Cada arquivo funciona de forma independente e já contém todo o CSS necessário. As imagens continuam centralizadas na pasta de assets do projeto.</p>
+    <div class="grid">
+      <a href="00-cabecalho.html"><strong>Cabeçalho</strong><span aria-hidden="true">↗</span></a>
+      <a href="01-hero.html"><strong>Hero</strong><span aria-hidden="true">↗</span></a>
+      <a href="02-problemas.html"><strong>Problemas que a GDR resolve</strong><span aria-hidden="true">↗</span></a>
+      <a href="03-apresentacao-gdr.html"><strong>Apresentação da GDR</strong><span aria-hidden="true">↗</span></a>
+      <a href="04-metodologia.html"><strong>Metodologia</strong><span aria-hidden="true">↗</span></a>
+      <a href="05-entregas.html"><strong>O que muda quando a GDR entra</strong><span aria-hidden="true">↗</span></a>
+      <a href="06-cases-de-sucesso.html"><strong>Cases de sucesso</strong><span aria-hidden="true">↗</span></a>
+      <a href="07-faq.html"><strong>Perguntas frequentes</strong><span aria-hidden="true">↗</span></a>
+      <a href="08-formulario-cta.html"><strong>Formulário e CTA</strong><span aria-hidden="true">↗</span></a>
+      <a href="09-rodape.html"><strong>Rodapé</strong><span aria-hidden="true">↗</span></a>
+    </div>
+  </main>
+</body>
+</html>
