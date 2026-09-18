@@ -5,7 +5,8 @@ import { fileURLToPath } from "node:url";
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectDirectory = path.resolve(scriptDirectory, "..");
-const kitDirectory = path.join(projectDirectory, "elementor-kit");
+const wordpressDirectory = path.join(projectDirectory, "export", "wordpress");
+const kitDirectory = path.join(wordpressDirectory, "elementor-kit");
 const sourceDirectory = path.join(kitDirectory, "fontes-editaveis");
 const assetDirectory = path.join(kitDirectory, "assets");
 
