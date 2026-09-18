@@ -19,3 +19,24 @@
         </div>
       </div>
     </section>
+<script data-nowprocket data-no-optimize="1" data-cfasync="false">
+(() => {
+  const section = document.querySelector("#gdr");
+  if (!section || section.dataset.localMotionReady === "true") return;
+  section.dataset.localMotionReady = "true";
+  section.classList.add("reveal-ready");
+  let frame = 0;
+  const update = () => {
+    frame = 0;
+    const rect = section.getBoundingClientRect();
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    section.classList.toggle("is-visible", rect.top <= vh * .88 && rect.bottom >= vh * .08);
+  };
+  const requestUpdate = () => {
+    if (!frame) frame = window.requestAnimationFrame(update);
+  };
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  window.addEventListener("resize", requestUpdate, { passive: true });
+  requestUpdate();
+})();
+</script>

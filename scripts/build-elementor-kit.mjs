@@ -215,12 +215,13 @@ const elementorJsSource = jsSource
 
 const interactions = `<script id="gdr-elementor-interactions" data-nowprocket data-no-optimize="1" data-cfasync="false">
 (() => {
+  let initialized = false;
   const initializeGdrPage = () => {
-    if (document.documentElement.dataset.gdrPageReady === "true") return;
+    if (initialized) return;
     if (!document.querySelector("#inicio") || !document.querySelector("#resultados")) return;
-    document.documentElement.dataset.gdrPageReady = "true";
 
 ${elementorJsSource.split("\n").map((line) => `    ${line}`).join("\n")}
+    initialized = true;
   };
 
   const scheduleGdrInitialization = () => window.requestAnimationFrame(initializeGdrPage);
@@ -240,14 +241,73 @@ ${elementorJsSource.split("\n").map((line) => `    ${line}`).join("\n")}
 })();
 </script>`;
 
+const consultantsMotionBootstrap = `<script data-nowprocket data-no-optimize="1" data-cfasync="false">
+(() => {
+  const section = document.querySelector("#gdr");
+  if (!section || section.dataset.localMotionReady === "true") return;
+  section.dataset.localMotionReady = "true";
+  section.classList.add("reveal-ready");
+  let frame = 0;
+  const update = () => {
+    frame = 0;
+    const rect = section.getBoundingClientRect();
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    section.classList.toggle("is-visible", rect.top <= vh * .88 && rect.bottom >= vh * .08);
+  };
+  const requestUpdate = () => {
+    if (!frame) frame = window.requestAnimationFrame(update);
+  };
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  window.addEventListener("resize", requestUpdate, { passive: true });
+  requestUpdate();
+})();
+</script>`;
+
+const deliverablesMotionBootstrap = `<script data-nowprocket data-no-optimize="1" data-cfasync="false">
+(() => {
+  const section = document.querySelector("#entregas");
+  const scrollArea = section?.querySelector(".deliverables-scroll");
+  const stage = section?.querySelector(".deliverables-grid");
+  const cards = [...(section?.querySelectorAll(".deliverable-card") || [])];
+  if (!section || !scrollArea || !stage || !cards.length || section.dataset.localStackReady === "true") return;
+  section.dataset.localStackReady = "true";
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+  let frame = 0;
+  const update = () => {
+    frame = 0;
+    const mobile = window.matchMedia("(max-width: 760px)").matches;
+    const top = mobile ? 72 : 96;
+    const rect = scrollArea.getBoundingClientRect();
+    const travel = Math.max(1, scrollArea.offsetHeight - stage.offsetHeight);
+    const progress = clamp((top - rect.top) / travel, 0, 1);
+    const cardHeight = Math.max(190, cards[0].offsetHeight);
+    const initialStep = cardHeight + (mobile ? 24 : 28);
+    const finalStep = mobile ? 70 : 80;
+    cards.forEach((card, index) => {
+      const cardProgress = clamp((progress - index * .115) / .43, 0, 1);
+      const eased = 1 - Math.pow(1 - cardProgress, 3);
+      const y = index * initialStep + (index * finalStep - index * initialStep) * eased;
+      card.style.setProperty("--card-y", y.toFixed(2) + "px");
+    });
+  };
+  const requestUpdate = () => {
+    if (!frame) frame = window.requestAnimationFrame(update);
+  };
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  window.addEventListener("resize", requestUpdate, { passive: true });
+  window.addEventListener("load", requestUpdate, { once: true });
+  requestUpdate();
+})();
+</script>`;
+
 const markupByKey = {
   config: globalCss,
   header,
   inicio: findSection("inicio"),
   "problemas-cards": findSection("problemas-cards"),
-  gdr: findSection("gdr"),
+  gdr: `${findSection("gdr")}\n${consultantsMotionBootstrap}`,
   metodologia: findSection("metodologia"),
-  entregas: findSection("entregas"),
+  entregas: `${findSection("entregas")}\n${deliverablesMotionBootstrap}`,
   resultados: `${findSection("resultados")}\n${resultsModal}`,
   faq: findSection("faq"),
   diagnostico: findSection("diagnostico"),

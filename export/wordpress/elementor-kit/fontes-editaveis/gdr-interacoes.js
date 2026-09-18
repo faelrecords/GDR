@@ -12,6 +12,9 @@ document.querySelectorAll("[data-carousel]").forEach((carousel) => {
   let dragging = false;
   let suppressVideoClick = false;
 
+  // Evita que um carrossel incompleto interrompa todas as animações da página.
+  if (!track || !slides.length) return;
+
   const syncMobileHeight = (animate = true) => {
     if (!viewport) return;
 
@@ -44,7 +47,7 @@ document.querySelectorAll("[data-carousel]").forEach((carousel) => {
       dot.setAttribute("aria-current", selected ? "true" : "false");
     });
 
-    status.textContent = `${String(current + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}`;
+    if (status) status.textContent = `${String(current + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}`;
     syncMobileHeight(animate);
   };
 
@@ -267,23 +270,35 @@ revealTargets.forEach((element, index) => {
   });
 });
 
-if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      const isSectionSweep = entry.target.classList.contains("section-sweep");
-      const revealThreshold = isSectionSweep
-        ? (window.matchMedia("(min-width: 761px)").matches ? .96 : .36)
-        : .1;
+if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  // Cálculo pelo scroll é mais previsível dentro dos wrappers do Elementor do
+  // que IntersectionObserver, especialmente com cache e containers aninhados.
+  let revealFrame = 0;
 
-      if (entry.isIntersecting && entry.intersectionRatio >= revealThreshold) {
-        entry.target.classList.add("is-visible");
-      } else if (!entry.isIntersecting) {
-        entry.target.classList.remove("is-visible");
-      }
+  const updateRevealTargets = () => {
+    revealFrame = 0;
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+    const mobile = window.matchMedia("(max-width: 760px)").matches;
+
+    revealTargets.forEach((element) => {
+      const rect = element.getBoundingClientRect();
+      const isSectionSweep = element.classList.contains("section-sweep");
+      const enterLine = viewportHeight * (isSectionSweep && !mobile ? .88 : .9);
+      const leaveLine = viewportHeight * .08;
+      const visible = rect.top <= enterLine && rect.bottom >= leaveLine;
+      element.classList.toggle("is-visible", visible);
     });
-  }, { rootMargin: "0px 0px -10%", threshold: [0, .1, .36, .96] });
+  };
 
-  revealTargets.forEach((element) => revealObserver.observe(element));
+  const requestRevealUpdate = () => {
+    if (revealFrame) return;
+    revealFrame = window.requestAnimationFrame(updateRevealTargets);
+  };
+
+  window.addEventListener("scroll", requestRevealUpdate, { passive: true });
+  window.addEventListener("resize", requestRevealUpdate, { passive: true });
+  window.addEventListener("load", requestRevealUpdate, { once: true });
+  requestRevealUpdate();
 } else {
   revealTargets.forEach((element) => element.classList.add("is-visible"));
 }
