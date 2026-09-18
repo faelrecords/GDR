@@ -1,0 +1,73 @@
+<!--
+  ================================================================
+  09 — Formulário e CTA
+  ================================================================
+  EDITE: textos da coluna .cta-copy e campos dentro de form.lead-form.
+  INTEGRAÇÃO: substitua action pelo endpoint desejado ou troque apenas este widget pelo formulário nativo do Elementor.
+  A página de destino atual é /obrigado/.
+  DICA: edite textos e URLs, mas preserve classes e atributos data-*.
+-->
+<section class="section cta-section" id="diagnostico">
+      <div class="cta-glow" aria-hidden="true"></div>
+      <div class="container cta-grid">
+        <div class="cta-copy">
+          <h2>Descubra o que está impedindo o lucro de aparecer.</h2>
+          <p>Conte um pouco sobre a sua empresa. A equipe GDR analisa o cenário antes da conversa para chegar ao ponto mais rápido.</p>
+          <p class="cta-detail">Em até 24 horas, entramos em contato para agendar o pré-diagnóstico. Sem compromisso e sem promessa fácil.</p>
+        </div>
+
+        <form class="lead-form" action="https://gdrconsulting.com.br/obrigado/" method="get">
+          <div class="form-heading">
+            <strong>Solicite seu pré-diagnóstico com a GDR.</strong>
+            <small>Leva cerca de 2 minutos.</small>
+          </div>
+          <div class="form-row form-row-identity">
+            <label>
+              <span>Nome</span>
+              <input type="text" name="nome" autocomplete="given-name" placeholder="Seu nome" required>
+            </label>
+            <label>
+              <span>Sobrenome</span>
+              <input type="text" name="sobrenome" autocomplete="family-name" placeholder="Seu sobrenome" required>
+            </label>
+            <label>
+              <span>Nome da sua empresa</span>
+              <input type="text" name="empresa" autocomplete="organization" placeholder="Nome da empresa" required>
+            </label>
+          </div>
+          <div class="form-row">
+            <label>
+              <span>Telefone</span>
+              <input type="tel" name="telefone" autocomplete="tel" placeholder="(00) 00000-0000" required>
+            </label>
+            <label>
+              <span>E-mail</span>
+              <input type="email" name="email" autocomplete="email" placeholder="voce@empresa.com.br" required>
+            </label>
+          </div>
+          <div class="form-row">
+            <label>
+              <span>Cidade</span>
+              <input type="text" name="cidade" autocomplete="address-level2" placeholder="Sua cidade" required>
+            </label>
+            <label>
+              <span>Quantidade de colaboradores</span>
+              <select name="colaboradores" required>
+                <option value="" selected disabled>Selecione</option>
+                <option>Até 5</option>
+                <option>6 a 15</option>
+                <option>16 a 30</option>
+                <option>31 a 60</option>
+                <option>Mais de 60</option>
+              </select>
+            </label>
+          </div>
+          <label class="consent">
+            <input type="checkbox" name="consentimento" required>
+            <span>Concordo em receber o contato da equipe GDR sobre meu pré-diagnóstico.</span>
+          </label>
+          <button class="button button-red form-submit" type="submit">Quero meu pré-diagnóstico <span aria-hidden="true">↗</span></button>
+          <small>Seus dados serão usados apenas para este atendimento.</small>
+        </form>
+      </div>
+    </section>

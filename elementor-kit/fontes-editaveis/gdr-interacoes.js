@@ -1,0 +1,348 @@
+document.querySelectorAll("[data-carousel]").forEach((carousel) => {
+  const track = carousel.querySelector("[data-carousel-track]");
+  const viewport = carousel.querySelector(".testimonial-viewport");
+  const slides = [...carousel.querySelectorAll("[data-carousel-slide]")];
+  const dots = [...carousel.querySelectorAll("[data-carousel-dot]")];
+  const previous = carousel.parentElement.querySelector("[data-carousel-prev]");
+  const next = carousel.parentElement.querySelector("[data-carousel-next]");
+  const status = carousel.querySelector("[data-carousel-status]");
+  let current = 0;
+  let startX = 0;
+  let dragX = 0;
+  let dragging = false;
+  let suppressVideoClick = false;
+
+  const syncMobileHeight = (animate = true) => {
+    if (!viewport) return;
+
+    if (!window.matchMedia("(max-width: 760px)").matches) {
+      viewport.style.removeProperty("height");
+      viewport.style.removeProperty("transition");
+      return;
+    }
+
+    viewport.style.transition = animate
+      ? "height .38s cubic-bezier(.22,.7,.2,1)"
+      : "none";
+
+    window.requestAnimationFrame(() => {
+      viewport.style.height = `${slides[current].scrollHeight}px`;
+    });
+  };
+
+  const render = (animate = true) => {
+    track.style.transition = animate ? "transform .5s cubic-bezier(.22,.7,.2,1)" : "none";
+    track.style.transform = `translate3d(-${current * 100}%, 0, 0)`;
+
+    slides.forEach((slide, slideIndex) => {
+      slide.setAttribute("aria-hidden", slideIndex === current ? "false" : "true");
+    });
+
+    dots.forEach((dot, dotIndex) => {
+      const selected = dotIndex === current;
+      dot.classList.toggle("active", selected);
+      dot.setAttribute("aria-current", selected ? "true" : "false");
+    });
+
+    status.textContent = `${String(current + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}`;
+    syncMobileHeight(animate);
+  };
+
+  const show = (index) => {
+    current = (index + slides.length) % slides.length;
+    render();
+  };
+
+  previous?.addEventListener("click", () => show(current - 1));
+  next?.addEventListener("click", () => show(current + 1));
+  dots.forEach((dot, index) => dot.addEventListener("click", () => show(index)));
+
+  carousel.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") show(current - 1);
+    if (event.key === "ArrowRight") show(current + 1);
+  });
+
+  carousel.addEventListener("pointerdown", (event) => {
+    const videoTrigger = event.target.closest("[data-video-trigger]");
+    const canDragVideo = videoTrigger && window.matchMedia("(max-width: 760px)").matches;
+    if (event.target.closest("a") || (event.target.closest("button") && !canDragVideo)) return;
+    dragging = true;
+    startX = event.clientX;
+    dragX = 0;
+    carousel.classList.add("is-dragging");
+    try { carousel.setPointerCapture(event.pointerId); } catch (_) { /* Progressive enhancement. */ }
+    render(false);
+  });
+
+  carousel.addEventListener("pointermove", (event) => {
+    if (!dragging) return;
+    dragX = event.clientX - startX;
+    const offset = current * carousel.clientWidth - dragX;
+    track.style.transform = `translate3d(-${offset}px, 0, 0)`;
+  });
+
+  const finishDrag = (event) => {
+    if (!dragging) return;
+    dragging = false;
+    carousel.classList.remove("is-dragging");
+    try {
+      if (carousel.hasPointerCapture(event.pointerId)) carousel.releasePointerCapture(event.pointerId);
+    } catch (_) { /* The slide still settles without capture support. */ }
+
+    if (Math.abs(dragX) > 8) {
+      suppressVideoClick = true;
+      window.setTimeout(() => { suppressVideoClick = false; }, 0);
+    }
+
+    if (Math.abs(dragX) > Math.min(90, carousel.clientWidth * .16)) {
+      show(dragX < 0 ? current + 1 : current - 1);
+    } else {
+      render();
+    }
+  };
+
+  carousel.addEventListener("pointerup", finishDrag);
+  carousel.addEventListener("pointercancel", finishDrag);
+  carousel.addEventListener("click", (event) => {
+    if (!suppressVideoClick || !event.target.closest("[data-video-trigger]")) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }, true);
+  window.addEventListener("resize", () => syncMobileHeight(false), { passive: true });
+  render(false);
+});
+
+const videoModal = document.querySelector("[data-video-modal]");
+const videoPlayer = videoModal?.querySelector("[data-video-player]");
+const videoEmbed = videoModal?.querySelector("[data-video-embed]");
+const videoFallback = videoModal?.querySelector("[data-video-fallback]");
+const videoFallbackImage = videoModal?.querySelector("[data-video-fallback-image]");
+const videoFallbackTitle = videoModal?.querySelector("[data-video-fallback-title]");
+const videoFallbackCopy = videoModal?.querySelector("[data-video-fallback-copy]");
+const videoExternal = videoModal?.querySelector("[data-video-external]");
+const videoModalTitle = videoModal?.querySelector("[data-video-modal-title]");
+let lastVideoTrigger = null;
+
+const getYoutubeVideoId = (source) => source.match(/youtube\.com\/embed\/([\w-]{11})/)?.[1] || "";
+
+const closeTestimonialVideo = () => {
+  if (!videoModal || videoModal.hidden) return;
+
+  videoPlayer?.pause();
+  if (videoPlayer) {
+    videoPlayer.removeAttribute("src");
+    videoPlayer.removeAttribute("poster");
+    videoPlayer.load();
+  }
+
+  if (videoEmbed) {
+    videoEmbed.src = "";
+    videoEmbed.hidden = true;
+  }
+
+  videoModal.hidden = true;
+  document.body.classList.remove("video-modal-open");
+  lastVideoTrigger?.focus();
+};
+
+document.querySelectorAll("[data-video-trigger]").forEach((trigger) => {
+  trigger.addEventListener("click", () => {
+    if (!videoModal || !videoPlayer || !videoEmbed || !videoFallback || !videoFallbackImage || !videoModalTitle) return;
+
+    const source = trigger.dataset.videoSrc?.trim();
+    const poster = trigger.dataset.videoPoster || "";
+    const title = trigger.dataset.videoTitle || "Depoimento de cliente";
+    lastVideoTrigger = trigger;
+
+    videoModalTitle.textContent = title;
+    videoFallbackImage.src = poster;
+    videoFallbackImage.alt = `Capa do depoimento de ${title}`;
+    if (videoExternal) videoExternal.hidden = true;
+    videoModal.hidden = false;
+    document.body.classList.add("video-modal-open");
+
+    if (source) {
+      const isEmbeddedPlayer = /youtube\.com\/embed|player\.vimeo\.com/.test(source);
+      const youtubeId = getYoutubeVideoId(source);
+      const isLocalFile = window.location.protocol === "file:";
+
+      if (youtubeId && isLocalFile) {
+        videoPlayer.hidden = true;
+        videoEmbed.hidden = true;
+        videoEmbed.src = "";
+        videoFallback.hidden = false;
+        if (videoFallbackTitle) videoFallbackTitle.textContent = title;
+        if (videoFallbackCopy) videoFallbackCopy.textContent = "Para assistir aqui dentro, abra o site pelo servidor local em vez de usar o arquivo diretamente.";
+        if (videoExternal) {
+          videoExternal.href = "http://127.0.0.1:8080/index.html#resultados";
+          videoExternal.hidden = false;
+        }
+        videoModal.querySelector("[data-video-close]")?.focus();
+        return;
+      }
+
+      videoFallback.hidden = true;
+
+      if (isEmbeddedPlayer) {
+        videoPlayer.hidden = true;
+        videoEmbed.hidden = false;
+        const embedUrl = new URL(source);
+        if (/youtube\.com$/.test(embedUrl.hostname)) {
+          embedUrl.searchParams.set("origin", window.location.origin);
+          embedUrl.searchParams.set("widget_referrer", window.location.href);
+        }
+        videoEmbed.src = embedUrl.toString();
+      } else {
+        videoEmbed.hidden = true;
+        videoEmbed.src = "";
+        videoPlayer.hidden = false;
+        videoPlayer.poster = poster;
+        videoPlayer.src = source;
+        videoPlayer.load();
+        videoPlayer.play().catch(() => { /* O usuário pode iniciar pelos controles nativos. */ });
+      }
+    } else {
+      videoPlayer.hidden = true;
+      videoEmbed.hidden = true;
+      videoEmbed.src = "";
+      videoFallback.hidden = false;
+    }
+
+    videoModal.querySelector("[data-video-close]")?.focus();
+  });
+});
+
+videoModal?.querySelectorAll("[data-video-close]").forEach((button) => {
+  button.addEventListener("click", closeTestimonialVideo);
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeTestimonialVideo();
+  }
+});
+
+const logoRail = document.querySelector(".client-logo-list");
+
+// A lista original é mantida no HTML para facilitar futuras inclusões e trocas.
+// Esta rotina apenas duplica todas as logos uma vez, criando a sequência infinita.
+if (logoRail && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  const originalLogos = [...logoRail.children];
+
+  originalLogos.forEach((logo) => {
+    const clone = logo.cloneNode(true);
+    clone.alt = "";
+    clone.setAttribute("aria-hidden", "true");
+    clone.dataset.logoClone = "";
+    logoRail.appendChild(clone);
+  });
+
+  logoRail.classList.add("is-looping");
+}
+
+const revealTargets = document.querySelectorAll([
+  "[data-reveal]",
+  ".section-heading",
+  ".problem-card",
+  ".problem-cta",
+  ".section-sweep",
+  ".method-story-steps li",
+  ".testimonial-carousel",
+  ".lead-form",
+  ".cta-copy"
+].join(","));
+
+revealTargets.forEach((element, index) => {
+  element.classList.add("reveal-ready");
+  element.style.setProperty("--reveal-delay", `${Math.min(index % 4, 3) * 55}ms`);
+});
+
+[
+  [".problem-grid .problem-card", 65],
+  [".method-story-steps li", 75],
+  [".accordion details", 60]
+].forEach(([selector, interval]) => {
+  document.querySelectorAll(selector).forEach((element, index) => {
+    element.style.setProperty("--reveal-delay", `${index * interval}ms`);
+  });
+});
+
+if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const isSectionSweep = entry.target.classList.contains("section-sweep");
+      const revealThreshold = isSectionSweep
+        ? (window.matchMedia("(min-width: 761px)").matches ? .96 : .36)
+        : .1;
+
+      if (entry.isIntersecting && entry.intersectionRatio >= revealThreshold) {
+        entry.target.classList.add("is-visible");
+      } else if (!entry.isIntersecting) {
+        entry.target.classList.remove("is-visible");
+      }
+    });
+  }, { rootMargin: "0px 0px -10%", threshold: [0, .1, .36, .96] });
+
+  revealTargets.forEach((element) => revealObserver.observe(element));
+} else {
+  revealTargets.forEach((element) => element.classList.add("is-visible"));
+}
+
+document.querySelectorAll(".accordion details").forEach((item) => {
+  item.addEventListener("toggle", () => {
+    if (!item.open) return;
+    document.querySelectorAll(".accordion details[open]").forEach((openItem) => {
+      if (openItem !== item) openItem.removeAttribute("open");
+    });
+  });
+});
+
+const deliverablesSection = document.querySelector(".deliverables-section");
+const deliverablesScroll = deliverablesSection?.querySelector(".deliverables-scroll");
+const deliverablesStage = deliverablesSection?.querySelector(".deliverables-grid");
+const deliverableCards = [...(deliverablesSection?.querySelectorAll(".deliverable-card") || [])];
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+let deliverablesFrame = 0;
+
+const clamp = (value, minimum, maximum) => Math.min(Math.max(value, minimum), maximum);
+
+const updateDeliverablesStack = () => {
+  deliverablesFrame = 0;
+  if (!deliverablesScroll || !deliverablesStage || !deliverableCards.length || reduceMotion.matches) return;
+
+  const scrollRect = deliverablesScroll.getBoundingClientRect();
+  const mobile = window.matchMedia("(max-width: 760px)").matches;
+  const stickyTop = mobile ? 72 : 96;
+  const travel = Math.max(1, deliverablesScroll.offsetHeight - deliverablesStage.offsetHeight);
+  const progress = clamp((stickyTop - scrollRect.top) / travel, 0, 1);
+  const cardHeight = deliverableCards[0].offsetHeight;
+  const initialStep = cardHeight + (mobile ? 24 : 28);
+  const finalStep = mobile ? 70 : 80;
+
+  deliverableCards.forEach((card, index) => {
+    const start = index * .115;
+    const cardProgress = clamp((progress - start) / .43, 0, 1);
+    const eased = 1 - Math.pow(1 - cardProgress, 3);
+    const initialY = index * initialStep;
+    const finalY = index * finalStep;
+    const currentY = initialY + (finalY - initialY) * eased;
+    card.style.setProperty("--card-y", `${currentY.toFixed(2)}px`);
+  });
+};
+
+const requestDeliverablesUpdate = () => {
+  if (deliverablesFrame) return;
+  deliverablesFrame = window.requestAnimationFrame(updateDeliverablesStack);
+};
+
+if (deliverablesScroll && deliverablesStage && deliverableCards.length) {
+  window.addEventListener("scroll", requestDeliverablesUpdate, { passive: true });
+  window.addEventListener("resize", requestDeliverablesUpdate, { passive: true });
+  reduceMotion.addEventListener?.("change", requestDeliverablesUpdate);
+  requestDeliverablesUpdate();
+}
+
+const header = document.querySelector(".site-header");
+const updateHeader = () => header?.classList.toggle("is-scrolled", window.scrollY > 24);
+window.addEventListener("scroll", updateHeader, { passive: true });
+updateHeader();

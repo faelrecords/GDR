@@ -5,7 +5,8 @@
   "description": "Landing page da GDR com editor visual GrapesJS",
   "scripts": {
     "start": "http-server . -p 8080 -c-1",
-    "editor": "http-server . -p 8080 -c-1 -o /editor.html"
+    "editor": "http-server . -p 8080 -c-1 -o /editor.html",
+    "build:elementor": "node scripts/build-elementor-kit.mjs"
   },
   "dependencies": {
     "grapesjs": "0.23.6"
