@@ -6,10 +6,11 @@
   Mantenha-o como o último widget da página.
   DICA: edite textos e URLs, mas preserve classes e atributos data-*.
 -->
-<script id="gdr-elementor-interactions">
+<script id="gdr-elementor-interactions" data-nowprocket data-no-optimize="1" data-cfasync="false">
 (() => {
   const initializeGdrPage = () => {
     if (document.documentElement.dataset.gdrPageReady === "true") return;
+    if (!document.querySelector("#inicio") || !document.querySelector("#resultados")) return;
     document.documentElement.dataset.gdrPageReady = "true";
 
     document.querySelectorAll("[data-carousel]").forEach((carousel) => {
@@ -286,7 +287,7 @@
         entries.forEach((entry) => {
           const isSectionSweep = entry.target.classList.contains("section-sweep");
           const revealThreshold = isSectionSweep
-            ? (window.matchMedia("(min-width: 761px)").matches ? .96 : .36)
+            ? (window.matchMedia("(min-width: 761px)").matches ? .45 : .28)
             : .1;
     
           if (entry.isIntersecting && entry.intersectionRatio >= revealThreshold) {
@@ -295,7 +296,7 @@
             entry.target.classList.remove("is-visible");
           }
         });
-      }, { rootMargin: "0px 0px -10%", threshold: [0, .1, .36, .96] });
+      }, { rootMargin: "0px 0px -4%", threshold: [0, .1, .28, .45] });
     
       revealTargets.forEach((element) => revealObserver.observe(element));
     } else {
@@ -363,10 +364,19 @@
     
   };
 
+  const scheduleGdrInitialization = () => window.requestAnimationFrame(initializeGdrPage);
+
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initializeGdrPage, { once: true });
+    document.addEventListener("DOMContentLoaded", scheduleGdrInitialization, { once: true });
   } else {
-    window.requestAnimationFrame(initializeGdrPage);
+    scheduleGdrInitialization();
   }
+
+  window.addEventListener("load", scheduleGdrInitialization, { once: true });
+  window.addEventListener("pageshow", scheduleGdrInitialization, { once: true });
+  window.addEventListener("elementor/frontend/init", scheduleGdrInitialization, { once: true });
+  if (window.jQuery) window.jQuery(window).one("elementor/frontend/init", scheduleGdrInitialization);
+  window.setTimeout(scheduleGdrInitialization, 350);
+  window.setTimeout(scheduleGdrInitialization, 1200);
 })();
 </script>

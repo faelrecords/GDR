@@ -208,20 +208,35 @@ ${elementorCompatibilityCss}
 ${cssSource}
 </style>`;
 
-const interactions = `<script id="gdr-elementor-interactions">
+const elementorJsSource = jsSource
+  .replace('? (window.matchMedia("(min-width: 761px)").matches ? .96 : .36)', '? (window.matchMedia("(min-width: 761px)").matches ? .45 : .28)')
+  .replace('threshold: [0, .1, .36, .96]', 'threshold: [0, .1, .28, .45]')
+  .replace('rootMargin: "0px 0px -10%"', 'rootMargin: "0px 0px -4%"');
+
+const interactions = `<script id="gdr-elementor-interactions" data-nowprocket data-no-optimize="1" data-cfasync="false">
 (() => {
   const initializeGdrPage = () => {
     if (document.documentElement.dataset.gdrPageReady === "true") return;
+    if (!document.querySelector("#inicio") || !document.querySelector("#resultados")) return;
     document.documentElement.dataset.gdrPageReady = "true";
 
-${jsSource.split("\n").map((line) => `    ${line}`).join("\n")}
+${elementorJsSource.split("\n").map((line) => `    ${line}`).join("\n")}
   };
 
+  const scheduleGdrInitialization = () => window.requestAnimationFrame(initializeGdrPage);
+
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initializeGdrPage, { once: true });
+    document.addEventListener("DOMContentLoaded", scheduleGdrInitialization, { once: true });
   } else {
-    window.requestAnimationFrame(initializeGdrPage);
+    scheduleGdrInitialization();
   }
+
+  window.addEventListener("load", scheduleGdrInitialization, { once: true });
+  window.addEventListener("pageshow", scheduleGdrInitialization, { once: true });
+  window.addEventListener("elementor/frontend/init", scheduleGdrInitialization, { once: true });
+  if (window.jQuery) window.jQuery(window).one("elementor/frontend/init", scheduleGdrInitialization);
+  window.setTimeout(scheduleGdrInitialization, 350);
+  window.setTimeout(scheduleGdrInitialization, 1200);
 })();
 </script>`;
 
@@ -327,6 +342,113 @@ const pageTemplate = {
   content: definitions.map(createContainer),
 };
 
+const graphiteThemeCss = `<style id="gdr-graphite-theme">
+/*
+  OPÇÃO VISUAL 02 — GRAFITE + TRANSIÇÕES SUAVES
+  Edite aqui somente se quiser ajustar os tons ou a altura dos degradês.
+*/
+:root {
+  --gdr-graphite: #1a1b1e;
+  --gdr-graphite-deep: #141518;
+  --gdr-graphite-soft: #222328;
+}
+
+body.elementor-page {
+  background: var(--gdr-graphite);
+}
+
+.site-header,
+.site-header.is-scrolled {
+  background: rgba(26, 27, 30, .94);
+}
+
+.hero {
+  background: var(--gdr-graphite);
+}
+
+.hero-shell {
+  border-color: #3a3b40;
+  background:
+    radial-gradient(circle at 88% 36%, rgba(200, 0, 18, .17), transparent 31%),
+    linear-gradient(135deg, #202125 0%, #18191c 58%, #242024 100%);
+}
+
+.client-logos {
+  background: linear-gradient(180deg, var(--gdr-graphite) 0%, #1d1e22 100%);
+}
+
+/* Grafite para claro: hero → problemas. */
+#problemas-cards {
+  background: linear-gradient(180deg, var(--gdr-graphite) 0%, #f5f3ef 105px, #f5f3ef 100%);
+}
+
+.consultants-showcase {
+  background: var(--gdr-graphite);
+}
+
+/* Claro para imagem escura: problemas → apresentação da equipe. */
+#gdr.consultants-showcase::before {
+  content: "";
+  position: absolute;
+  z-index: 4;
+  inset: 0 0 auto;
+  height: 92px;
+  pointer-events: none;
+  background: linear-gradient(180deg, #f5f3ef 0%, rgba(245,243,239,.72) 28%, transparent 100%);
+}
+
+.consultants-shade {
+  background: linear-gradient(90deg, rgba(26,27,30,.98) 0%, rgba(26,27,30,.86) 44%, rgba(26,27,30,.12) 76%);
+}
+
+/* Imagem escura para claro: apresentação → método. */
+.method-unified {
+  background: linear-gradient(180deg, var(--gdr-graphite) 0%, #f7f6f3 92px, #f7f6f3 100%);
+}
+
+/* Claro para grafite: entregas → cases. */
+#resultados.results-video-showcase {
+  background: linear-gradient(180deg, #f3f3f1 0%, var(--gdr-graphite) 82px, var(--gdr-graphite) 100%);
+}
+
+.results-video-showcase .testimonial-carousel,
+.results-video-showcase .testimonial-content,
+.results-video-showcase .testimonial-footer {
+  background-color: var(--gdr-graphite-soft);
+}
+
+/* Grafite para claro: cases → FAQ. */
+.faq-section {
+  background: linear-gradient(180deg, var(--gdr-graphite) 0%, #f5f3ef 92px, #f5f3ef 100%);
+}
+
+/* Claro para grafite: FAQ → formulário. */
+.cta-section {
+  background:
+    radial-gradient(circle at 12% 34%, rgba(200,0,18,.2), transparent 35%),
+    linear-gradient(180deg, #f5f3ef 0%, var(--gdr-graphite) 92px, var(--gdr-graphite-deep) 100%);
+}
+
+.site-footer {
+  border-top: 1px solid rgba(255,255,255,.08);
+  background: linear-gradient(180deg, var(--gdr-graphite-deep), #1c1d20);
+}
+
+@media (max-width: 760px) {
+  #problemas-cards { background: linear-gradient(180deg, var(--gdr-graphite) 0%, #f5f3ef 68px, #f5f3ef 100%); }
+  #gdr.consultants-showcase::before { height: 62px; }
+  .method-unified { background: linear-gradient(180deg, var(--gdr-graphite) 0%, #f7f6f3 64px, #f7f6f3 100%); }
+  #resultados.results-video-showcase { background: linear-gradient(180deg, #f3f3f1 0%, var(--gdr-graphite) 58px, var(--gdr-graphite) 100%); }
+  .faq-section { background: linear-gradient(180deg, var(--gdr-graphite) 0%, #f5f3ef 62px, #f5f3ef 100%); }
+  .cta-section { background: linear-gradient(180deg, #f5f3ef 0%, var(--gdr-graphite) 64px, var(--gdr-graphite-deep) 100%); }
+}
+</style>`;
+
+const graphiteTemplate = structuredClone(pageTemplate);
+graphiteTemplate.title = "GDR — Landing Page grafite com degradês";
+graphiteTemplate.page_settings.background_color = "#1A1B1E";
+graphiteTemplate.content[0].elements[0].settings.html += `\n${graphiteThemeCss}`;
+
 const thankYouBody = thankYouSource.match(/<body[^>]*>([\s\S]*?)<\/body>/i)?.[1]?.trim();
 if (!thankYouBody) throw new Error("Conteúdo da página de obrigado não encontrado.");
 
@@ -375,8 +497,9 @@ Compatibilidade preparada:
 
 ## Arquivos para importar
 
-1. \`GDR-Landing-Page-Elementor.json\` — landing page completa.
-2. \`GDR-Obrigado-Elementor.json\` — página de agradecimento.
+1. \`GDR-Landing-Page-Elementor.json\` — opção visual original corrigida.
+2. \`GDR-Landing-Page-Elementor-Grafite.json\` — opção grafite com degradês entre as seções.
+3. \`GDR-Obrigado-Elementor.json\` — página de agradecimento.
 
 No WordPress, abra **Modelos → Modelos salvos → Importar modelos** e envie o JSON.
 Depois, crie uma página com layout **Elementor Canvas** e insira o modelo importado.
@@ -436,6 +559,25 @@ ${htmlFor(definition)}
 </html>
 `;
 
+const graphitePreviewHtml = `<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prévia do Kit Elementor Grafite — GDR</title>
+</head>
+<body class="elementor-page">
+  ${graphiteTemplate.content.map((container) => `<div class="e-con ${container.settings._css_classes}">
+    <div class="elementor-widget-html ${container.elements[0].settings._css_classes}">
+      <div class="elementor-widget-container">
+${container.elements[0].settings.html}
+      </div>
+    </div>
+  </div>`).join("\n")}
+</body>
+</html>
+`;
+
 await Promise.all([
   mkdir(kitDirectory, { recursive: true }),
   mkdir(sourceDirectory, { recursive: true }),
@@ -445,12 +587,16 @@ await Promise.all([
 
 await Promise.all([
   writeFile(path.join(kitDirectory, "GDR-Landing-Page-Elementor.json"), `${JSON.stringify(pageTemplate, null, 2)}\n`, "utf8"),
+  writeFile(path.join(kitDirectory, "GDR-Landing-Page-Elementor-Grafite.json"), `${JSON.stringify(graphiteTemplate, null, 2)}\n`, "utf8"),
   writeFile(path.join(kitDirectory, "GDR-Obrigado-Elementor.json"), `${JSON.stringify(thankYouTemplate, null, 2)}\n`, "utf8"),
   writeFile(path.join(wordpressDirectory, "GDR-Landing-Page-Elementor.json"), `${JSON.stringify(pageTemplate, null, 2)}\n`, "utf8"),
+  writeFile(path.join(wordpressDirectory, "GDR-Landing-Page-Elementor-Grafite.json"), `${JSON.stringify(graphiteTemplate, null, 2)}\n`, "utf8"),
   writeFile(path.join(wordpressDirectory, "GDR-Obrigado-Elementor.json"), `${JSON.stringify(thankYouTemplate, null, 2)}\n`, "utf8"),
   writeFile(path.join(kitDirectory, "README.md"), readme, "utf8"),
   writeFile(path.join(kitDirectory, "CORRECAO-MENU-RODAPE.css"), `${elementorCompatibilityCss}\n`, "utf8"),
   writeFile(path.join(kitDirectory, "preview.html"), previewHtml, "utf8"),
+  writeFile(path.join(kitDirectory, "preview-grafite.html"), graphitePreviewHtml, "utf8"),
+  writeFile(path.join(widgetDirectory, "00-config-grafite.html"), `${graphiteTemplate.content[0].elements[0].settings.html}\n`, "utf8"),
   writeFile(path.join(sourceDirectory, "gdr-global.css"), cssSource, "utf8"),
   writeFile(path.join(sourceDirectory, "gdr-interacoes.js"), jsSource, "utf8"),
   cp(path.join(projectDirectory, "assets"), assetDirectory, { recursive: true, force: true }),

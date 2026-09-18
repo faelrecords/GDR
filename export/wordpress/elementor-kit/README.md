@@ -9,8 +9,9 @@ Compatibilidade preparada:
 
 ## Arquivos para importar
 
-1. `GDR-Landing-Page-Elementor.json` — landing page completa.
-2. `GDR-Obrigado-Elementor.json` — página de agradecimento.
+1. `GDR-Landing-Page-Elementor.json` — opção visual original corrigida.
+2. `GDR-Landing-Page-Elementor-Grafite.json` — opção grafite com degradês entre as seções.
+3. `GDR-Obrigado-Elementor.json` — página de agradecimento.
 
 No WordPress, abra **Modelos → Modelos salvos → Importar modelos** e envie o JSON.
 Depois, crie uma página com layout **Elementor Canvas** e insira o modelo importado.
