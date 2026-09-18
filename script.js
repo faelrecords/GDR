@@ -112,35 +112,6 @@ document.querySelectorAll("[data-carousel]").forEach((carousel) => {
   render(false);
 });
 
-const mobilePreviewToggle = document.querySelector("[data-mobile-preview-toggle]");
-const mobilePreviewOverlay = document.querySelector("[data-mobile-preview]");
-const mobilePreviewClose = document.querySelector("[data-mobile-preview-close]");
-const mobilePreviewFrame = document.querySelector("[data-mobile-preview-frame]");
-
-const closeMobilePreview = () => {
-  if (!mobilePreviewOverlay || mobilePreviewOverlay.hidden) return;
-  mobilePreviewOverlay.hidden = true;
-  document.body.classList.remove("mobile-preview-open");
-  mobilePreviewToggle?.setAttribute("aria-pressed", "false");
-  if (mobilePreviewFrame) mobilePreviewFrame.src = "about:blank";
-  mobilePreviewToggle?.focus();
-};
-
-mobilePreviewToggle?.addEventListener("click", () => {
-  if (!mobilePreviewOverlay || !mobilePreviewFrame) return;
-  const frameUrl = new URL(window.location.href);
-  frameUrl.search = "";
-  frameUrl.searchParams.set("mobile-preview-frame", "1");
-  frameUrl.searchParams.set("preview-cache", String(Date.now()));
-  mobilePreviewFrame.src = frameUrl.toString();
-  mobilePreviewOverlay.hidden = false;
-  document.body.classList.add("mobile-preview-open");
-  mobilePreviewToggle.setAttribute("aria-pressed", "true");
-  mobilePreviewClose?.focus();
-});
-
-mobilePreviewClose?.addEventListener("click", closeMobilePreview);
-
 const videoModal = document.querySelector("[data-video-modal]");
 const videoPlayer = videoModal?.querySelector("[data-video-player]");
 const videoEmbed = videoModal?.querySelector("[data-video-embed]");
@@ -248,7 +219,6 @@ videoModal?.querySelectorAll("[data-video-close]").forEach((button) => {
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     closeTestimonialVideo();
-    closeMobilePreview();
   }
 });
 

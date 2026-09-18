@@ -6,10 +6,11 @@ const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectDirectory = path.resolve(scriptDirectory, "..");
 const exportDirectory = path.join(projectDirectory, "export");
 
-const [source, css, javascript] = await Promise.all([
+const [source, css, javascript, thankYouSource] = await Promise.all([
   readFile(path.join(projectDirectory, "index.html"), "utf8"),
   readFile(path.join(projectDirectory, "styles.css"), "utf8"),
   readFile(path.join(projectDirectory, "script.js"), "utf8"),
+  readFile(path.join(projectDirectory, "obrigado.html"), "utf8"),
 ]);
 
 const sectionDefinitions = [
@@ -126,6 +127,7 @@ const navigationItems = [
   { file: "00-cabecalho.html", title: "Cabeçalho" },
   ...sectionDefinitions,
   { file: "09-rodape.html", title: "Rodapé" },
+  { file: "10-obrigado.html", title: "Página de obrigado" },
 ];
 
 const exportIndex = `<!doctype html>
@@ -166,4 +168,16 @@ const exportIndex = `<!doctype html>
 
 await writeFile(path.join(exportDirectory, "index.html"), exportIndex, "utf8");
 
-console.log(`Exportadas ${sectionDefinitions.length} seções, cabeçalho, rodapé e índice para ${exportDirectory}`);
+const exportedThankYou = thankYouSource
+  .replace(
+    /<link rel="stylesheet" href="styles\.css[^>]*>/i,
+    `<style>\n${css}\n</style>`,
+  )
+  .replaceAll('src="assets/', 'src="../assets/')
+  .replaceAll("src='assets/", "src='../assets/")
+  .replaceAll('href="index.html"', 'href="../index.html"')
+  .replaceAll("href='index.html'", "href='../index.html'");
+
+await writeFile(path.join(exportDirectory, "10-obrigado.html"), exportedThankYou, "utf8");
+
+console.log(`Exportadas ${sectionDefinitions.length} seções, cabeçalho, rodapé, página de obrigado e índice para ${exportDirectory}`);

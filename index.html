@@ -32,10 +32,6 @@
         <a href="#resultados">Resultados</a>
         <a href="#faq">Dúvidas</a>
       </nav>
-      <button class="preview-toggle" type="button" data-mobile-preview-toggle aria-pressed="false">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"></rect><path d="M10 5h4M11 18.5h2"></path></svg>
-        Ver mobile
-      </button>
       <a class="button button-small button-light" href="#diagnostico">Falar com a GDR</a>
     </div>
   </header>
@@ -468,8 +464,7 @@
             <input type="checkbox" name="consentimento" required>
             <span>Concordo em receber o contato da equipe GDR sobre meu pré-diagnóstico.</span>
           </label>
-          <!-- Demonstração: formnovalidate leva direto à página de agradecimento. Remover na integração. -->
-          <button class="button button-red form-submit" type="submit" formnovalidate>Quero meu pré-diagnóstico <span aria-hidden="true">↗</span></button>
+          <button class="button button-red form-submit" type="submit">Quero meu pré-diagnóstico <span aria-hidden="true">↗</span></button>
           <small>Seus dados serão usados apenas para este atendimento.</small>
         </form>
       </div>
@@ -495,15 +490,6 @@
       </div>
     </div>
   </footer>
-  <div class="mobile-preview-overlay" data-mobile-preview hidden>
-    <div class="mobile-preview-toolbar">
-      <span>Prévia mobile <strong>390 px</strong></span>
-      <button type="button" data-mobile-preview-close>Voltar ao desktop <span aria-hidden="true">×</span></button>
-    </div>
-    <div class="mobile-preview-device">
-      <iframe data-mobile-preview-frame title="Prévia mobile do site GDR"></iframe>
-    </div>
-  </div>
   <a class="mobile-sticky-cta" href="#diagnostico">Falar com a GDR <span aria-hidden="true">→</span></a>
 </body>
 </html>
