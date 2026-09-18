@@ -253,13 +253,20 @@ document.addEventListener("keydown", (event) => {
 });
 
 const logoRail = document.querySelector(".client-logo-list");
+
+// A lista original é mantida no HTML para facilitar futuras inclusões e trocas.
+// Esta rotina apenas duplica todas as logos uma vez, criando a sequência infinita.
 if (logoRail && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-  [...logoRail.children].forEach((logo) => {
+  const originalLogos = [...logoRail.children];
+
+  originalLogos.forEach((logo) => {
     const clone = logo.cloneNode(true);
     clone.alt = "";
     clone.setAttribute("aria-hidden", "true");
+    clone.dataset.logoClone = "";
     logoRail.appendChild(clone);
   });
+
   logoRail.classList.add("is-looping");
 }
 

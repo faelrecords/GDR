@@ -2485,16 +2485,16 @@ section[id] { scroll-margin-top: 84px; }
 .client-logos { overflow: hidden; }
 
 .client-logo-list.is-looping {
+  --logo-gap: 42px;
+  --logo-loop-offset: 21px;
   width: max-content;
   display: flex;
   grid-template-columns: none;
-  gap: 42px;
+  gap: var(--logo-gap);
   align-items: center;
   animation: client-logo-loop 26s linear infinite;
   will-change: transform;
 }
-
-.client-logo-list.is-looping:hover { animation-play-state: paused; }
 
 .client-logo-list.is-looping img {
   width: 92px;
@@ -2503,15 +2503,16 @@ section[id] { scroll-margin-top: 84px; }
 }
 
 @keyframes client-logo-loop {
-  to { transform: translate3d(calc(-50% - 21px), 0, 0); }
+  to { transform: translate3d(calc(-50% - var(--logo-loop-offset)), 0, 0); }
 }
 
 @media (max-width: 760px) {
-  .client-logo-list.is-looping { gap: 28px; animation-duration: 20s; }
-  .client-logo-list.is-looping img { width: 72px; min-width: 72px; max-width: 72px; }
-  @keyframes client-logo-loop {
-    to { transform: translate3d(calc(-50% - 14px), 0, 0); }
+  .client-logo-list.is-looping {
+    --logo-gap: 28px;
+    --logo-loop-offset: 14px;
+    animation-duration: 20s;
   }
+  .client-logo-list.is-looping img { width: 72px; min-width: 72px; max-width: 72px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -5889,13 +5890,20 @@ document.addEventListener("keydown", (event) => {
 });
 
 const logoRail = document.querySelector(".client-logo-list");
+
+// A lista original é mantida no HTML para facilitar futuras inclusões e trocas.
+// Esta rotina apenas duplica todas as logos uma vez, criando a sequência infinita.
 if (logoRail && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-  [...logoRail.children].forEach((logo) => {
+  const originalLogos = [...logoRail.children];
+
+  originalLogos.forEach((logo) => {
     const clone = logo.cloneNode(true);
     clone.alt = "";
     clone.setAttribute("aria-hidden", "true");
+    clone.dataset.logoClone = "";
     logoRail.appendChild(clone);
   });
+
   logoRail.classList.add("is-looping");
 }
 
